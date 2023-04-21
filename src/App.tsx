@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Guarantor from './pages/Guarantor';
+import Layout from './pages/Layout';
+import Login from './pages/Login';
+import Users from './pages/Users';
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+
+        <Route path="/dashboard" element={<Layout />}>
+          <Route index element={<Users />} />
+          <Route path="guarantors" element={<Guarantor/>} />
+        </Route>
+      </Routes>
+     </BrowserRouter>
   );
 }
 

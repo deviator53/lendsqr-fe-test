@@ -1,3 +1,10 @@
+html,
+body {
+  margin: 0;
+  font-family: 'Avenir Next LT Pro', sans-serif;
+    background-color: #FFFFFF;
+}
+
 .App {
   text-align: center;
 }
