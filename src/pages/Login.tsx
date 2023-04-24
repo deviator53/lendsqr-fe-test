@@ -25,7 +25,7 @@ const Login: React.FC = () => {
                   className="w-full h-full object-fit"
                 />
               </div>
-              <div className="w-[600px] h-[350px] mt-[100px]">
+              <div className="w-[600px] h-[350px] mt-[200px]">
                 <img
                   src={Banner}
                   alt="banner"
