@@ -19,7 +19,8 @@ import REPORTS from "../images/chart-bar 2.png";
 import PREFERENCES from "../images/sliders-h 1.png";
 import PRICING from "../images/badge-percent 1.png";
 import AUDIT from "../images/clipboard-list 1.png";
-
+import SYSTEMMESSAGE from "../images/tire 1.png";
+import LOGOUT from "../images/sign-out 1.png";
 
 
 
@@ -166,8 +167,24 @@ export const SETTINGS_SIDEBAR_LINKS = [
     },
     {
         key: 'audit',
-        label: 'Audit Report',
+        label: 'Audit Logs',
         path: 'audit',
         icon: AUDIT
+    },
+    {
+        key: 'message',
+        label: 'System Message',
+        path: 'message',
+        icon: SYSTEMMESSAGE
     }
+]
+
+export const SIGNOUT = [
+    {
+        key: 'logout',
+        label: 'Logout',
+        path: 'logout',
+        icon: LOGOUT
+    }
+    
 ]

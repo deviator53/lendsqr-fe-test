@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useDebugValue } from "react";
 import UserIcon from "../images/user-icon.png";
 import LoanIcon from "../images/loans-icon.png";
 import ActiveUser from "../images/active-icon.png";
@@ -25,12 +25,13 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 
 type User = {
-  id: number;
+  id: string;
   orgName: string;
   userName: string;
   phoneNumber: string;
   email: string;
   createdAt: string;
+  status: string;
 };
 
 // type UserStatus = {
@@ -45,7 +46,7 @@ const Users = () => {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null); // Keep track of selected user ID
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null); // Keep track of selected user ID
   const [userStatus, setUserStatus] = useState<string>("Inactive");
 
   useEffect(() => {
@@ -111,9 +112,14 @@ const Users = () => {
   // const endIndex = startIndex + usersPerPage;
   const displayedUsers = users.slice(startIndex, endIndex);
 
+  console.log('displayed users are:');
+  displayedUsers.forEach((user) => {
+    console.log(JSON.stringify(user));
+  });
+
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    userId: number
+    userId: string
   ) => {
     setAnchorEl(event.currentTarget);
     setSelectedUserId(userId); // Set the selected user ID
@@ -132,21 +138,35 @@ const Users = () => {
 //   initialUserStatus[userId] = status;
 // };
 
-  const handleMenuItemClick = (menuItem: string, userId: number) => {
+  const handleMenuItemClick = (menuItem: string, userId: string) => {
     switch (menuItem) {
       case "View Details":
-        // Handle View Details click
+        window.location.href = `/users/${userId}`;
         break;
       case "Blacklist User":
-        setUserStatus(prevUserStatus =>  "Blacklisted");
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === userId ? { ...user } : user
+          )
+        );
+        setUserStatus("Blacklisted");
         handleMenuClose();
         break;
       case "Activate User":
-        setUserStatus(prevUserStatus =>  "Activated");
+        setUsers((prevUsers) =>
+          prevUsers.map((user) => 
+            user.id === userId ? { ...user } : user
+          )
+        );
+        setUserStatus("Activated");
         handleMenuClose();
         break;
       default:
-        setUserStatus(prevUserStatus => "inactive");
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === userId ? { ...user } : user
+          )
+        );
         break;
     }
     handleMenuClose();
@@ -272,8 +292,8 @@ const Users = () => {
                       Loading...
                     </div>
                   ) : (
-                    displayedUsers?.map((user) => (
-                      <TableRow key={user.id}>
+                    displayedUsers?.map((user, index) => (
+                      <TableRow key={index}>
                         <TableCell>{user.orgName}</TableCell>
                         <TableCell>{user.userName}</TableCell>
                         <TableCell>{user.email}</TableCell>
@@ -295,25 +315,18 @@ const Users = () => {
                         <TableCell>
                           <IconButton
                           component="button"
-                            id={`basic-button-${user.id}`}
-                            aria-expanded={
-                              Boolean(anchorEl) ? "true" : undefined
-                            }
-                            aria-haspopup="true"
-                            
                             onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => handleMenuOpen(event, user.id)}
                           >
                             <MoreVertIcon />
                           </IconButton>{" "}
                           <Menu
-                              id={`basic-button-${user.id}`}
                               anchorEl={anchorEl}
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                             keepMounted
                           >
                             <MenuItem>
-                              <div className="flex justify-center items-center"><span><IconButton><RemoveRedEyeOutlinedIcon /></IconButton></span> <Link to={`user/${user.id}`}><span>View Details</span></Link></div>
+                              <div className="flex justify-center items-center"><span><IconButton><RemoveRedEyeOutlinedIcon /></IconButton></span> <Link to={`${user.id}`}><span>View Details</span></Link></div>
                             </MenuItem>
                             <MenuItem
                               onClick={() => handleMenuItemClick("Blacklist User", user.id)}

@@ -58,7 +58,7 @@ const User = () => {
 
   const [activeTab, setActiveTab] = useState<number>(0);
 
-  const params = useParams();
+  const { userId } = useParams<{userId: string}>();
 
   const [data, setData] = useState<UserData>({
     userName: "",
@@ -99,7 +99,7 @@ const User = () => {
   const fetchData = async () => {
     await axios
       .get<UserData>(
-        `https://6270020422c706a0ae70b72c.mockapi.io/lendsqr/api/v1/users/${params.id}`
+        `https://6270020422c706a0ae70b72c.mockapi.io/lendsqr/api/v1/users/${userId}`
       )
       .then((res) => {
         setData(res.data);
@@ -110,7 +110,7 @@ const User = () => {
 
   useEffect(() => {
     fetchData();
-  }, [params.id]);
+  }, [userId]);
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
